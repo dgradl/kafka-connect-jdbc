@@ -327,7 +327,13 @@ public class DataConverter {
 
       case Types.NUMERIC:
       case Types.DECIMAL: {
-        colValue = resultSet.getBigDecimal(col);
+        //check scale from meta and reflect on BigDecimal object
+        int scale = resultSet.getMetaData().getScale(col);
+        if (resultSet.getBigDecimal(col) != null) {
+          colValue = resultSet.getBigDecimal(col).setScale(scale);
+        } else {
+          colValue = null;
+        }
         break;
       }
 
